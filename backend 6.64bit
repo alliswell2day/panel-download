@@ -74,7 +74,7 @@ pip install supervisor==3.1
 
 chkconfig supervisord on
 
-https://raw.githubusercontent.com/alliswell2day/panel-download/master/supervisord.conf -O /etc/supervisord.conf
+wget https://raw.githubusercontent.com/alliswell2day/panel-download/master/supervisord.conf -O /etc/supervisord.conf
 wget https://raw.githubusercontent.com/alliswell2day/panel-download/master/supervisord -O /etc/init.d/supervisord
 
 service supervisord start
