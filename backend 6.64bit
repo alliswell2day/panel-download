@@ -1,3 +1,12 @@
+systemctl stop firewalld
+systemctl mask firewalld
+yum install iptables-services -y
+systemctl status iptables
+systemctl enable iptables
+systemctl start iptables
+systemctl status iptables
+systemctl restart iptables
+
 yum -y install epel-release
 
 yum install python-setuptools python-pip -y
