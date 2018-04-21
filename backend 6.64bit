@@ -32,6 +32,8 @@ cd shadowsocks
 
 chmod +x *.sh
 
+pip install --upgrade pip
+
 yum -y install python-devel libffi-devel openssl-devel 
 
 pip install -r requirements.txt
