@@ -26,6 +26,8 @@ cd ../ && rm -rf libsodium*
 
 wget https://github.com/alliswell2day/panel-download/raw/master/ss.zip
 
+unzip ss
+
 cd shadowsocks
 
 chmod +x *.sh
