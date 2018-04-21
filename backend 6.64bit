@@ -1,12 +1,69 @@
+panel
+-----------------------------------
+
+wget http://soft.vpser.net/lnmp/lnmp1.2-full.tar.gz
+tar xvzf lnmp1.2-full.tar.gz
+cd lnmp1.2-full
+./install.sh
+
+lnmp vhost add
+
+------------vhost/conf---------
+location / {
+           try_files $uri $uri/ /index.php$is_args$args;
+                }
+
+----------------------------------
+cd /home/wwwroot/ss.panel
+yum install git -y
+git clone https://github.com/glzjin/ss-panel-v3-mod.git tmp -b new_master && mv tmp/.git . && rm -rf tmp && git reset --hard
+chown -R root:root *
+chmod -R 777 *
+chown -R www:www storage
+chattr -i .user.ini
+mv .user.ini public
+cd public
+chattr +i .user.ini
+service nginx restart
+
+cd /home/wwwroot/ss.panel
+php composer.phar install
+
+cp config/.config.php.example config/.config.php
+
+nano config/.config.php
+
+
+php -n xcat createAdmin
+
+php xcat syncusers
+
+service crond start
+chkconfig crond on
+yum install cronie
+vi crond 
+
+59 23 * * * php /home/wwwroot/xxx/xcat sendDiaryMail
+*/1 * * * * php /home/wwwroot/xxxx/xcat synclogin
+*/1 * * * * php /home/wwwroot/xxxx/xcat syncvpn
+59 23 * * * php -n /home/wwwrootxxxx/xcat dailyjob
+*/1 * * * * php /home/wwwroot/xxxx/xcat checkjob    
+*/1 * * * * php -n /home/wwwrootxxxx/xcat syncnas
+
+
+------------------------------------------------------------------------------------------------------
+
 systemctl stop firewalld
 systemctl mask firewalld
+
+**************iptables centos 7.x **********************
 yum install iptables-services -y
 systemctl status iptables
 systemctl enable iptables
 systemctl start iptables
 systemctl status iptables
 systemctl restart iptables
-
+*******************************************************
 yum -y install epel-release
 
 yum install python-setuptools python-pip -y
@@ -90,7 +147,11 @@ chkconfig supervisord on
 wget https://raw.githubusercontent.com/alliswell2day/panel-download/master/supervisord.conf -O /etc/supervisord.conf
 wget https://raw.githubusercontent.com/alliswell2day/panel-download/master/supervisord -O /etc/init.d/supervisord
 
+chmod -R 777 /etc/init.d/supervisord
+
 service supervisord start
+
+**********cent os 6 64 bit  serverspeeder*********
 
 rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-firmware-2.6.32-504.3.3.el6.noarch.rpm
 rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-504.3.3.el6.x86_64.rpm --force
@@ -98,4 +159,4 @@ rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-2.6.32-504.3.3.el6
 reboot
 
 wget -N --no-check-certificate https://github.com/91yun/serverspeeder/raw/master/serverspeeder.sh && bash serverspeeder.sh
-
+************************************************
