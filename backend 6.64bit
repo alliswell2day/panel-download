@@ -95,6 +95,11 @@ yum -y install python-devel libffi-devel openssl-devel
 
 pip install -r requirements.txt
 
+yum whatprovides ifconfig
+
+yum -y install net-tools
+
+ifconfig
 
 rpm -ivh http://mirror.centos.org/centos/7/os/x86_64/Packages/net-tools-2.0-0.22.20131004git.el7.x86_64.rpm --force
 
