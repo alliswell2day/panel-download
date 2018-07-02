@@ -78,7 +78,9 @@ yum -y update
 
 yum install python-setuptools python-pip -y
 
-yum install supervisor python-meld3 python-pip wget -y
+easy_install pip
+
+yum install supervisor python-meld3 wget -y
 
 yum install git
 
