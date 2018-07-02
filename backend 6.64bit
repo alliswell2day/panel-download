@@ -17,6 +17,9 @@ location / {
 cd /home/wwwroot/ss.panel
 yum install git -y
 git clone https://github.com/glzjin/ss-panel-v3-mod.git tmp -b new_master && mv tmp/.git . && rm -rf tmp && git reset --hard
+
+git clone https://github.com/NimaQu/ss-panel-v3-mod_Uim.git tmp -b dev && mv tmp/.git . && rm -rf tmp && git reset --hard
+
 chown -R root:root *
 chmod -R 777 *
 chown -R www:www storage
