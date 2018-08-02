@@ -76,11 +76,10 @@ yum -y install epel-release
 
 yum -y update
 
-yum install python-setuptools python-pip -y
+yum install python-setuptools python-pip supervisor python-meld3 wget -y
 
 easy_install pip
 
-yum install supervisor python-meld3 wget -y
 
 yum install git
 
