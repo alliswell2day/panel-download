@@ -71,13 +71,13 @@ systemctl status iptables
 systemctl restart iptables
 ***************end install iptables ent os 7.x****************************************
 
+
+
+mkdir v2ray-agent  &&  cd v2ray-agent
+curl https://raw.githubusercontent.com/alliswell2day/shadowsocks-munager/v2ray_api/install.sh -o install.sh && chmod +x install.sh && bash install.sh
 sudo systemctl start docker
 sudo systemctl status docker
 chkconfig docker on
-
-mkdir v2ray-agent  &&  cd v2ray-agent
-curl https://raw.githubusercontent.com/rico93/shadowsocks-munager/v2ray_api/install.sh -o install.sh && chmod +x install.sh && bash install.sh
-
 
 yum -y install epel-release
 
