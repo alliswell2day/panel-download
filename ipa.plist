@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -19,7 +20,7 @@
                 <key>bundle-identifier</key>
                 <string>com.liguangming.Shadowrocket</string>
                 <key>bundle-version</key>
-                <string><string>2.1.23</string></string>
+                <string>2.1.23</string>
                 <key>kind</key>
                 <string>software</string>
                 <key>title</key>
