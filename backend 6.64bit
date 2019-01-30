@@ -71,6 +71,10 @@ systemctl status iptables
 systemctl restart iptables
 ***************end install iptables ent os 7.x****************************************
 
+chmod +x /etc/rc.d/rc.local
+python /root/client-linux.py
+sudo /root/shadowsocks/run.sh
+python3.6 /root/v2ray/run.py --config-file=/root/v2ray/config/config.yml
 
 
 STANDARD ( MANUAL ) INSTALLATION
