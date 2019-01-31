@@ -80,6 +80,11 @@ python3.6 /root/v2ray/run.py --config-file=/root/v2ray/config/config.yml
 STANDARD ( MANUAL ) INSTALLATION
 ----------------------------------------------------------------------------------------------------------------------------------------
 
+mkdir v2ray-agent  &&  cd v2ray-agent
+curl https://raw.githubusercontent.com/alliswell2day/shadowsocks-munager/v2ray_api/install.sh -o install.sh && chmod +x install.sh && bash install.sh
+
+docker-compose up -d
+
 CentOS 7
 
 **install v2ray：**
