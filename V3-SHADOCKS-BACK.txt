@@ -1,0 +1,191 @@
+
+SHADOWSOCKS
+--------------------------------------------------------------------------------------------------------------------------------
+yum -y install epel-release
+
+yum -y update
+
+yum install python-setuptools python-pip supervisor python-meld3 wget -y
+
+### easy_install pip
+
+
+yum install git
+
+yum -y groupinstall "Development Tools"
+
+wget https://github.com/jedisct1/libsodium/releases/download/1.0.16/libsodium-1.0.16.tar.gz
+tar xf libsodium-1.0.16.tar.gz && cd libsodium-1.0.16
+./configure && make -j2 && make install
+echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
+ldconfig
+cd ../ && rm -rf libsodium*
+
+wget https://github.com/alliswell2day/panel-download/raw/master/shadowsocks.zip
+
+unzip shadowsocks
+
+cd ../ && rm -rf shadowsocks.zip
+
+cd shadowsocks
+
+chmod +x *.sh
+
+pip install --upgrade pip
+
+yum -y install python-devel libffi-devel openssl-devel 
+
+pip install -r requirements.txt
+
+yum whatprovides ifconfig
+
+yum -y install net-tools
+
+ifconfig
+
+
+cat >> /etc/security/limits.conf << EOF
+* soft nofile 51200
+* hard nofile 51200
+EOF
+
+ulimit -n 51200
+
+
+cat >> /etc/sysctl.conf << EOF
+fs.file-max = 51200
+net.core.rmem_max = 67108864
+net.core.wmem_max = 67108864
+net.core.netdev_max_backlog = 250000
+net.core.somaxconn = 4096
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_tw_recycle = 0
+net.ipv4.tcp_fin_timeout = 30
+net.ipv4.tcp_keepalive_time = 1200
+net.ipv4.ip_local_port_range = 10000 65000
+net.ipv4.tcp_max_syn_backlog = 8192
+net.ipv4.tcp_max_tw_buckets = 5000
+net.ipv4.tcp_fastopen = 3
+net.ipv4.tcp_rmem = 4096 87380 67108864
+net.ipv4.tcp_wmem = 4096 65536 67108864
+net.ipv4.tcp_mtu_probing = 1
+EOF
+
+sysctl -p
+
+## echo "echo 1 >/proc/sys/net/ipv4/icmp_echo_ignore_all" >>/etc/rc.d/rc.local 
+
+
+pip install supervisor==3.1
+
+chkconfig supervisord on
+
+wget https://raw.githubusercontent.com/alliswell2day/panel-download/master/supervisord.conf -O /etc/supervisord.conf
+wget https://raw.githubusercontent.com/alliswell2day/panel-download/master/supervisord -O /etc/init.d/supervisord
+
+chmod -R 777 /etc/init.d/supervisord
+
+service supervisord start
+
+
+
+systemctl stop firewalld
+systemctl mask firewalld
+
+
+yum install iptables-services -y
+systemctl status iptables
+systemctl enable iptables
+systemctl start iptables
+systemctl status iptables
+systemctl restart iptables
+
+chmod +x /etc/rc.d/rc.local
+python /root/client-linux.py
+sudo /root/shadowsocks/run.sh
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+
+**********cent os 7 64 bit  serverspeeder*********
+
+rpm -ivh http://soft.91yun.org/ISO/Linux/CentOS/kernel/kernel-3.10.0-229.1.2.el7.x86_64.rpm --force
+
+reboot
+
+wget -N --no-check-certificate https://github.com/91yun/serverspeeder/raw/master/serverspeeder.sh && bash serverspeeder.sh
+
+
+
+---------------ADD PORT YOU WISH TO USE ONLY------------------
+
+-A INPUT -p tcp -m multiport --dports 10000:65500 -j ACCEPT 
+-A INPUT -p udp -m multiport --dports 10000:65500 -j ACCEPT 
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 3306 -j ACCEPT 
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT 
+-A INPUT -p udp -m state --state NEW -m udp --dport 53 -j ACCEPT 
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 8388 -j ACCEPT 
+-A INPUT -p udp -m state --state NEW -m udp --dport 8388 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT 
+
+-----------------BLOCK TORRENTING------------------------------------
+
+-A FORWARD -m string --string "BitTorrent" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string "BitTorrent protocol" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string "peer_id=" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string ".torrent" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string "announce.php?passkey=" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string "torrent" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string "announce" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string "info_hash" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string "get_peers" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string "announce_peer" --algo bm --to 65535 -j DROP
+-A FORWARD -m string --string "find_node" --algo bm --to 65535 -j DROP
+-A FORWARD -p udp -m string --algo bm --string "BitTorrent" -j DROP
+-A FORWARD -p udp -m string --algo bm --string "BitTorrent protocol" -j DROP
+-A FORWARD -p udp -m string --algo bm --string "peer_id=" -j DROP
+-A FORWARD -p udp -m string --algo bm --string ".torrent" -j DROP
+-A FORWARD -p udp -m string --algo bm --string "announce.php?passkey=" -j DROP 
+-A FORWARD -p udp -m string --algo bm --string "torrent" -j DROP
+-A FORWARD -p udp -m string --algo bm --string "announce" -j DROP
+-A FORWARD -p udp -m string --algo bm --string "info_hash" -j DROP
+-A FORWARD -p udp -m string --algo bm --string "tracker" -j DROP
+-A INPUT -p udp -m string --algo bm --string "BitTorrent" -j DROP
+-A INPUT -p udp -m string --algo bm --string "BitTorrent protocol" -j DROP
+-A INPUT -p udp -m string --algo bm --string "peer_id=" -j DROP
+-A INPUT -p udp -m string --algo bm --string ".torrent" -j DROP
+-A INPUT -p udp -m string --algo bm --string "announce.php?passkey=" -j DROP 
+-A INPUT -p udp -m string --algo bm --string "torrent" -j DROP
+-A INPUT -p udp -m string --algo bm --string "announce" -j DROP
+-A INPUT -p udp -m string --algo bm --string "info_hash" -j DROP
+-A INPUT -p udp -m string --algo bm --string "tracker" -j DROP
+-I INPUT -p udp -m string --algo bm --string "BitTorrent" -j DROP
+-I INPUT -p udp -m string --algo bm --string "BitTorrent protocol" -j DROP
+-I INPUT -p udp -m string --algo bm --string "peer_id=" -j DROP
+-I INPUT -p udp -m string --algo bm --string ".torrent" -j DROP
+-I INPUT -p udp -m string --algo bm --string "announce.php?passkey=" -j DROP 
+-I INPUT -p udp -m string --algo bm --string "torrent" -j DROP
+-I INPUT -p udp -m string --algo bm --string "announce" -j DROP
+-I INPUT -p udp -m string --algo bm --string "info_hash" -j DROP
+-I INPUT -p udp -m string --algo bm --string "tracker" -j DROP
+-I OUTPUT -p udp -m string --algo bm --string "BitTorrent" -j DROP
+-I OUTPUT -p udp -m string --algo bm --string "BitTorrent protocol" -j DROP
+-I OUTPUT -p udp -m string --algo bm --string "peer_id=" -j DROP
+-I OUTPUT -p udp -m string --algo bm --string ".torrent" -j DROP
+-I OUTPUT -p udp -m string --algo bm --string "announce.php?passkey=" -j DROP 
+-I OUTPUT -p udp -m string --algo bm --string "torrent" -j DROP
+-I OUTPUT -p udp -m string --algo bm --string "announce" -j DROP
+-I OUTPUT -p udp -m string --algo bm --string "info_hash" -j DROP
+-I OUTPUT -p udp -m string --algo bm --string "tracker" -j DROP
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT 
+
+----------------BLOCK ICMP (PING)--------------------
+
+-A INPUT -j REJECT --reject-with icmp-host-prohibited 
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited 
+-A OUTPUT -p icmp --icmp-type echo-request -j DROP
+-A INPUT -p icmp --icmp-type echo-request -j DROP
+-A OUTPUT -p icmp --icmp-type echo-reply -j DROP
+-A INPUT -p icmp --icmp-type echo-reply -j DROP
+---------------IPTABLES RULES END-------------------
